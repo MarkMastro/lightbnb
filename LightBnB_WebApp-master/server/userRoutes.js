@@ -24,8 +24,10 @@ module.exports = function(router, database) {
    * @param {String} password encrypted
    */
   const login =  function(email, password) {
+    console.log("at email/pass",email,password)
     return database.getUserWithEmail(email)
     .then(user => {
+      console.log("at user",user)
       if (bcrypt.compareSync(password, user.password)) {
         return user;
       }
@@ -36,6 +38,7 @@ module.exports = function(router, database) {
 
   router.post('/login', (req, res) => {
     const {email, password} = req.body;
+    console.log("at post",email,password)
     login(email, password)
       .then(user => {
         if (!user) {
