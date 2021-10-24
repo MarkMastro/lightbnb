@@ -80,17 +80,13 @@ const values=[user.name, user.email, user.password]
 
 return  pool.query(queryString, values)
 .then(res => {
-  console.log(res.rows)
   return res.rows[0];
 })
 .catch (err => {
   console.log('query error:', err)
 });
 
-  const userId = Object.keys(users).length + 1;
-  user.id = userId;
-  users[userId] = user;
-  return Promise.resolve(user);
+  // return Promise.resolve(user);
 }
 exports.addUser = addUser;
 
@@ -102,7 +98,23 @@ exports.addUser = addUser;
  * @return {Promise<[{}]>} A promise to the reservations.
  */
 const getAllReservations = function(guest_id, limit = 10) {
-  return getAllProperties(null, 2);
+  console.log("guest is",guest_id)
+  let queryString=`SELECT reservations.*, properties.*
+  FROM reservations
+  JOIN properties ON reservations.property_id=properties.id
+  WHERE reservations.guest_id=$1
+  ORDER BY start_date desc
+  LIMIT 10`;
+
+  
+  return  pool.query(queryString, [guest_id])
+  .then(res => {
+    return res.rows;
+  })
+  .catch (err => {
+    console.log('query error:', err)
+  });
+
 }
 exports.getAllReservations = getAllReservations;
 

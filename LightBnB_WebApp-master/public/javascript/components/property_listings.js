@@ -19,10 +19,13 @@ $(() => {
 
   function addProperties(properties, isReservation = false) {
     clearListings();
+    console.log("properties length ")
+    console.log(properties)
     for (const propertyId in properties) {
       const property = properties[propertyId];
       const listing = propertyListing.createListing(property, isReservation);
       addListing(listing);
+
     }
   }
   window.propertyListings.addProperties = addProperties;
